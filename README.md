@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cooked: High-Stakes Ego Destruction
 
-## Getting Started
+A web application designed to generate AI-driven roasts based on user data from Spotify and Valorant. The goal is to provide a brutally honest humorous critique of your personality through media consumption and gaming performance, wrapped in a "Hellfire Terminal" aesthetic.
 
-First, run the development server:
+## Features
+- **The Pit**: A massive glowing landing page that sets the tone for destruction.
+- **The Sacrificial Selection**: Choose between Spotify or Valorant as your sacrifice.
+- **The Burn**: Watch the progress bar fill with fire as data is extracted.
+- **The Reveal**: Get brutally roasted by an AI insult comedian persona, complete with dramatic typing animations and screen shake effects.
+- **Social Sharing**: Share your roasted verdict directly to X (Twitter).
 
+## How to use it
+
+### Prerequisites
+Make sure you have Node.js 18+ installed.
+
+### Setup locally
+
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd cooked-app
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up Environment Variables:**
+   Create a `.env.local` file in the root of the project to add your API keys.
+   ```bash
+   touch .env.local
+   ```
+   Add the following variables to your `.env.local`:
+   ```env
+   # Spotify OAuth (Pending Integration)
+   SPOTIFY_CLIENT_ID=your_spotify_client_id
+   SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+
+   # Riot Games API (Pending Integration)
+   RIOT_API_KEY=your_riot_dev_api_key
+
+   # AI Inference (Together AI / Groq) (Pending Integration)
+   GROQ_API_KEY=your_groq_api_key
+   # or
+   TOGETHER_API_KEY=your_together_api_key
+   ```
+   *Note: The current version uses Mock Data for demonstration. You can swap out the mock responses in `app/api/roast/route.ts` once your keys are ready.*
+
+4. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Open the App:**
+   Navigate to [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Deployment
+You can deploy this application seamlessly on Vercel:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx vercel --prod
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
+- **Framework**: Next.js 14+ (App Router)
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **Fonts**: JetBrains Mono & Inter
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Created from the Cooked Master Blueprint.*
