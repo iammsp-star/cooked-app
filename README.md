@@ -1,5 +1,7 @@
 # Cooked: High-Stakes Ego Destruction
 
+**🔥 [Play Now / Live Demo](https://cooked-app.vercel.app) 🔥**
+
 A web application designed to generate AI-driven roasts based on user data from Spotify and Valorant. The goal is to provide a brutally honest humorous critique of your personality through media consumption and gaming performance, wrapped in a "Hellfire Terminal" aesthetic.
 
 ## Features
