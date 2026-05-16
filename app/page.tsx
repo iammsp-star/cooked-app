@@ -19,7 +19,7 @@ export default function Home() {
 
   const handleEnter = () => setAppState("selection");
   
-  const handleSelect = async (platform: "spotify" | "valorant", accountId: string) => {
+  const handleSelect = async (platform: "spotify" | "valorant" | "github", accountId: string) => {
     setAppState("syncing");
     
     try {

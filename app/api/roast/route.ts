@@ -12,6 +12,12 @@ const VALORANT_ROASTS = [
   "You have 1000 hours in this game and your crosshair placement still looks like you're looking for loose change on the ground. A literal potato could hold an angle better than you."
 ];
 
+const GITHUB_ROASTS = [
+  "500 commits to main and zero tests? You're basically building a house of cards in a hurricane. I see more code on StackOverflow than in your actual brain.",
+  "Your contribution graph looks like a barcode that scans as 'unemployable'. A single green square every two months doesn't make you a developer.",
+  "Ah yes, the '10x engineer' who writes spaghetti code so tangled it could be served at an Italian restaurant. Your PRs are war crimes."
+];
+
 export async function POST(request: Request) {
   try {
     const { platform, accountId } = await request.json();
@@ -34,6 +40,11 @@ export async function POST(request: Request) {
       roast = `Listen here ${identity}, ${selectedRoast.charAt(0).toLowerCase() + selectedRoast.slice(1)}`;
       syncedMetrics = ["Silver 2", "Jett Instalock", "35% Win Rate", "0.8 KDA"];
       metrics = { status: "critical", damage: "low" };
+    } else if (platform === "github") {
+      const selectedRoast = GITHUB_ROASTS[Math.floor(Math.random() * GITHUB_ROASTS.length)];
+      roast = `Listen here ${identity}, ${selectedRoast.charAt(0).toLowerCase() + selectedRoast.slice(1)}`;
+      syncedMetrics = ["500 Commits to Main", "0 Tests Written", "StackOverflow Pro", "Spaghetti Code"];
+      metrics = { status: "unemployable", quality: "garbage" };
     } else {
       roast = "I don't even know what to roast you for. You're just generally a disappointment.";
       syncedMetrics = ["Unknown", "Data Not Found"];
