@@ -14,7 +14,6 @@ export default function Home() {
   const [appState, setAppState] = useState<AppState>("landing");
   const [roastData, setRoastData] = useState<string>("");
   const [identity, setIdentity] = useState<string>("ANONYMOUS_USER");
-  const [metricsData, setMetricsData] = useState<any>(null);
   const [syncedMetrics, setSyncedMetrics] = useState<string[]>([]);
   const [backendReady, setBackendReady] = useState(false);
 
@@ -26,7 +25,7 @@ export default function Home() {
     
     // Set mock data based on platform to feed the Groq AI
     let tokenBadges: string[] = [];
-    let platformData: any = {};
+    let platformData: Record<string, unknown> = {};
     
     if (platform === "spotify") {
       tokenBadges = ["Top Artist: Taylor Swift", "Pop", "Indie Rock", "Overplayed: Cruel Summer"];
@@ -43,7 +42,6 @@ export default function Home() {
     }
 
     setSyncedMetrics(tokenBadges);
-    setMetricsData(platformData);
     // Transition straight to the visualizer while fetching in the background
     setAppState("weightless_drift");
     
@@ -56,7 +54,7 @@ export default function Home() {
       
       const result = await res.json();
       setRoastData(result.roast || "You broke the AI. Congratulations, you're officially un-roastable.");
-    } catch (error) {
+    } catch {
       setRoastData("Connection to Hellfire Terminal lost. Your ego is safe... for now.");
     } finally {
       setBackendReady(true);
@@ -102,7 +100,6 @@ export default function Home() {
               key="reveal" 
               roast={roastData} 
               identity={identity} 
-              data={metricsData} 
               onReset={handleReset} 
             />
           )}

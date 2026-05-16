@@ -8,11 +8,10 @@ import { toBlob } from "html-to-image";
 interface RoastRevealProps {
   roast: string;
   identity: string;
-  data: any;
   onReset: () => void;
 }
 
-export default function RoastReveal({ roast, identity, data, onReset }: RoastRevealProps) {
+export default function RoastReveal({ roast, identity, onReset }: RoastRevealProps) {
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const [isSharing, setIsSharing] = useState(false);

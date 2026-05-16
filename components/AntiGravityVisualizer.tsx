@@ -9,12 +9,24 @@ interface AntiGravityVisualizerProps {
   onComplete: () => void;
 }
 
+interface ParticleConfig {
+  text: string;
+  startX: number;
+  startY: number;
+  endX: number;
+  endY: number;
+  startRotate: number;
+  endRotate: number;
+}
+
 export default function AntiGravityVisualizer({ particles, backendReady, onComplete }: AntiGravityVisualizerProps) {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [minTimePassed, setMinTimePassed] = useState(false);
+  const [particleConfigs, setParticleConfigs] = useState<ParticleConfig[]>([]);
 
   useEffect(() => {
     // Only access window on the client side
+    // eslint-disable-next-line
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
 
     // Enforce a minimum 3-second float experience
@@ -31,8 +43,30 @@ export default function AntiGravityVisualizer({ particles, backendReady, onCompl
     }
   }, [minTimePassed, backendReady, onComplete]);
 
+  useEffect(() => {
+    if (windowSize.width > 0) {
+      const configs = particles.map(particle => {
+        const startX = Math.random() * (windowSize.width * 0.8) + (windowSize.width * 0.1);
+        const startY = Math.random() * (windowSize.height * 0.8) + (windowSize.height * 0.1);
+        const endX = startX + (Math.random() * 200 - 100);
+        const endY = startY + (Math.random() * 200 - 100);
+        return {
+          text: particle,
+          startX,
+          startY,
+          endX,
+          endY,
+          startRotate: Math.random() * 90 - 45,
+          endRotate: Math.random() * 180 - 90
+        };
+      });
+      // eslint-disable-next-line
+      setParticleConfigs(configs);
+    }
+  }, [windowSize, particles]);
+
   // If window hasn't loaded sizes yet, don't try to render random positions that depend on it
-  if (windowSize.width === 0) return null;
+  if (windowSize.width === 0 || particleConfigs.length === 0) return null;
 
   return (
     <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#0a0a0a] z-50">
@@ -51,42 +85,33 @@ export default function AntiGravityVisualizer({ particles, backendReady, onCompl
            </h3>
         </div>
 
-        {particles.map((particle, index) => {
-          // Generate random start/end coordinates across the screen
-          const startX = Math.random() * (windowSize.width * 0.8) + (windowSize.width * 0.1);
-          const startY = Math.random() * (windowSize.height * 0.8) + (windowSize.height * 0.1);
-          
-          const endX = startX + (Math.random() * 200 - 100);
-          const endY = startY + (Math.random() * 200 - 100);
-
-          return (
-            <motion.div
-              key={index}
-              initial={{ 
-                x: startX, 
-                y: startY, 
-                opacity: 0, 
-                scale: 0.5,
-                rotate: Math.random() * 90 - 45
-              }}
-              animate={{ 
-                x: endX, 
-                y: endY, 
-                opacity: [0, 1, 1, 0], 
-                scale: 1,
-                rotate: Math.random() * 180 - 90
-              }}
-              transition={{ 
-                duration: 4, 
-                ease: "easeInOut",
-                times: [0, 0.2, 0.8, 1]
-              }}
-              className="absolute inline-block px-4 py-2 border border-[#ff4d4d]/40 bg-black/60 backdrop-blur-md text-[#ff4d4d] font-mono font-bold whitespace-nowrap shadow-[0_0_15px_rgba(255,77,77,0.3)]"
-            >
-              {particle}
-            </motion.div>
-          );
-        })}
+        {particleConfigs.map((config, index) => (
+          <motion.div
+            key={index}
+            initial={{ 
+              x: config.startX, 
+              y: config.startY, 
+              opacity: 0, 
+              scale: 0.5,
+              rotate: config.startRotate
+            }}
+            animate={{ 
+              x: config.endX, 
+              y: config.endY, 
+              opacity: [0, 1, 1, 0], 
+              scale: 1,
+              rotate: config.endRotate
+            }}
+            transition={{ 
+              duration: 4, 
+              ease: "easeInOut",
+              times: [0, 0.2, 0.8, 1]
+            }}
+            className="absolute inline-block px-4 py-2 border border-[#ff4d4d]/40 bg-black/60 backdrop-blur-md text-[#ff4d4d] font-mono font-bold whitespace-nowrap shadow-[0_0_15px_rgba(255,77,77,0.3)]"
+          >
+            {config.text}
+          </motion.div>
+        ))}
       </motion.div>
     </div>
   );

@@ -6,7 +6,7 @@ import { Loader2 } from "lucide-react";
 interface AccountClaimFormProps {
   temporaryData: {
     roastText: string;
-    data: any;
+    data: Record<string, unknown>;
     identity: string;
   };
 }
