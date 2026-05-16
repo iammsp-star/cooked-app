@@ -19,14 +19,14 @@ export default function Home() {
 
   const handleEnter = () => setAppState("selection");
   
-  const handleSelect = async (platform: "spotify" | "valorant") => {
+  const handleSelect = async (platform: "spotify" | "valorant", accountId: string) => {
     setAppState("syncing");
     
     try {
       const res = await fetch("/api/roast", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ platform })
+        body: JSON.stringify({ platform, accountId })
       });
       
       const data = await res.json();

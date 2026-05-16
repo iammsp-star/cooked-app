@@ -14,25 +14,25 @@ const VALORANT_ROASTS = [
 
 export async function POST(request: Request) {
   try {
-    const { platform } = await request.json();
+    const { platform, accountId } = await request.json();
 
     // Simulate network delay for the Account Sync Engine & Data Extraction
     await new Promise(resolve => setTimeout(resolve, 2500));
 
     let roast = "";
     let syncedMetrics: string[] = [];
-    let identity = "ANONYMOUS_USER";
+    let identity = accountId || "ANONYMOUS_USER";
     let metrics: any = {};
 
     if (platform === "spotify") {
-      roast = SPOTIFY_ROASTS[Math.floor(Math.random() * SPOTIFY_ROASTS.length)];
-      syncedMetrics = ["Top Artist: Taylor Swift", "Pop", "Indie Rock", "Overplayed: Cruel Summer"];
-      identity = "MusicSnob_99";
+      const selectedRoast = SPOTIFY_ROASTS[Math.floor(Math.random() * SPOTIFY_ROASTS.length)];
+      roast = `Listen here ${identity}, ${selectedRoast.charAt(0).toLowerCase() + selectedRoast.slice(1)}`;
+      syncedMetrics = [`Top Artist: Taylor Swift`, "Pop", "Indie Rock", "Overplayed: Cruel Summer"];
       metrics = { status: "tragic", vibe: "unbearable" };
     } else if (platform === "valorant") {
-      roast = VALORANT_ROASTS[Math.floor(Math.random() * VALORANT_ROASTS.length)];
+      const selectedRoast = VALORANT_ROASTS[Math.floor(Math.random() * VALORANT_ROASTS.length)];
+      roast = `Listen here ${identity}, ${selectedRoast.charAt(0).toLowerCase() + selectedRoast.slice(1)}`;
       syncedMetrics = ["Silver 2", "Jett Instalock", "35% Win Rate", "0.8 KDA"];
-      identity = "Hardstuck_Demon";
       metrics = { status: "critical", damage: "low" };
     } else {
       roast = "I don't even know what to roast you for. You're just generally a disappointment.";
