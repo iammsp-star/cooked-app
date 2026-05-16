@@ -16,35 +16,57 @@ export default function Home() {
   const [identity, setIdentity] = useState<string>("ANONYMOUS_USER");
   const [metricsData, setMetricsData] = useState<any>(null);
   const [syncedMetrics, setSyncedMetrics] = useState<string[]>([]);
+  const [backendReady, setBackendReady] = useState(false);
 
   const handleEnter = () => setAppState("selection");
   
-  const handleSelect = async (platform: "spotify" | "valorant" | "github", accountId: string) => {
-    setAppState("syncing");
+  const handleSelect = async (platform: "spotify" | "valorant" | "github" | "linkedin", accountId: string) => {
+    setIdentity(accountId);
+    setBackendReady(false);
+    
+    // Set mock data based on platform to feed the Groq AI
+    let tokenBadges: string[] = [];
+    let platformData: any = {};
+    
+    if (platform === "spotify") {
+      tokenBadges = ["Top Artist: Taylor Swift", "Pop", "Indie Rock", "Overplayed: Cruel Summer"];
+      platformData = { status: "tragic", vibe: "unbearable", topArtist: "Taylor Swift", topGenre: "Pop" };
+    } else if (platform === "valorant") {
+      tokenBadges = ["Silver 2", "Jett Instalock", "35% Win Rate", "0.8 KDA"];
+      platformData = { status: "critical", rank: "Silver 2", agent: "Jett", kda: "0.8" };
+    } else if (platform === "github") {
+      tokenBadges = ["500 Commits to Main", "0 Tests Written", "StackOverflow Pro", "Spaghetti Code"];
+      platformData = { status: "unemployable", commits: 500, tests: 0, quality: "garbage" };
+    } else if (platform === "linkedin") {
+      tokenBadges = ["500+ Connections", "Synergistic Visionary", "Open to Work", "Buzzword Enjoyer"];
+      platformData = { status: "cringe", connections: "500+", title: "Thought Leader", posts: "AI Generated" };
+    }
+
+    setSyncedMetrics(tokenBadges);
+    setMetricsData(platformData);
+    // Transition straight to the visualizer while fetching in the background
+    setAppState("weightless_drift");
     
     try {
       const res = await fetch("/api/roast", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ platform, accountId })
+        body: JSON.stringify({ data: platformData, identity: accountId })
       });
       
-      const data = await res.json();
-      setRoastData(data.roast || "You broke the AI. Congratulations, you're officially un-roastable.");
-      setMetricsData(data.metrics || { status: "critical", damage: "high" });
-      setIdentity(data.identity || "GUEST_" + Math.floor(Math.random() * 1000));
-      setSyncedMetrics(data.syncedMetrics || ["Data Extraction Failed"]);
+      const result = await res.json();
+      setRoastData(result.roast || "You broke the AI. Congratulations, you're officially un-roastable.");
     } catch (error) {
       setRoastData("Connection to Hellfire Terminal lost. Your ego is safe... for now.");
-      setSyncedMetrics(["Connection Failure"]);
+    } finally {
+      setBackendReady(true);
     }
-    
-    setAppState("weightless_drift");
   };
 
   const handleReset = () => {
     setRoastData("");
     setSyncedMetrics([]);
+    setBackendReady(false);
     setAppState("landing");
   };
 
@@ -71,6 +93,7 @@ export default function Home() {
             <AntiGravityVisualizer 
               key="drift" 
               particles={syncedMetrics} 
+              backendReady={backendReady}
               onComplete={() => setAppState("revealing")} 
             />
           )}

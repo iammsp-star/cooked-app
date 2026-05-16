@@ -5,23 +5,31 @@ import { useEffect, useState } from "react";
 
 interface AntiGravityVisualizerProps {
   particles: string[];
+  backendReady: boolean;
   onComplete: () => void;
 }
 
-export default function AntiGravityVisualizer({ particles, onComplete }: AntiGravityVisualizerProps) {
+export default function AntiGravityVisualizer({ particles, backendReady, onComplete }: AntiGravityVisualizerProps) {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const [minTimePassed, setMinTimePassed] = useState(false);
 
   useEffect(() => {
     // Only access window on the client side
     setWindowSize({ width: window.innerWidth, height: window.innerHeight });
 
-    // Transition to reveal after 4 seconds
+    // Enforce a minimum 3-second float experience
     const timer = setTimeout(() => {
-      onComplete();
-    }, 4500);
+      setMinTimePassed(true);
+    }, 3000);
 
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, []);
+
+  useEffect(() => {
+    if (minTimePassed && backendReady) {
+      onComplete();
+    }
+  }, [minTimePassed, backendReady, onComplete]);
 
   // If window hasn't loaded sizes yet, don't try to render random positions that depend on it
   if (windowSize.width === 0) return null;
