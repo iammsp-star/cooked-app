@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
 import { RefreshCcw, Share2, Share } from "lucide-react";
 import { toBlob } from "html-to-image";
-import AccountClaimForm from "./AccountClaimForm";
 
 interface RoastRevealProps {
   roast: string;
@@ -128,10 +127,7 @@ export default function RoastReveal({ roast, identity, data, onReset }: RoastRev
             </button>
           </div>
 
-          {/* 3. Conversion Hook: Claim Account Component */}
-          <div className="w-full max-w-md mt-4 border border-[#331111] p-6 bg-[#110000] rounded-md shadow-2xl">
-            <AccountClaimForm temporaryData={{ data, roastText: roast, identity }} />
-          </div>
+
           
           <button 
             onClick={onReset}
