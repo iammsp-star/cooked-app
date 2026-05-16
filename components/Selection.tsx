@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Music, Crosshair, Terminal, Linkedin, ArrowRight, ArrowLeft } from "lucide-react";
+import { Music, Crosshair, Terminal, Briefcase, ArrowRight, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 interface SelectionProps {
@@ -78,7 +78,7 @@ export default function Selection({ onSelect }: SelectionProps) {
                 onClick={() => setSelectedPlatform("linkedin")}
                 className="flex-1 p-12 flex flex-col items-center gap-6 border border-zinc-800 bg-zinc-950/50 hover:bg-zinc-900 rounded-xl transition-all hover:border-[#ff4d4d] hover:shadow-[0_0_30px_rgba(255,77,77,0.2)] group"
               >
-                <Linkedin className="w-20 h-20 text-blue-400 group-hover:text-[#ff4d4d] transition-colors" />
+                <Briefcase className="w-20 h-20 text-blue-400 group-hover:text-[#ff4d4d] transition-colors" />
                 <h3 className="text-3xl font-bold font-mono uppercase">LinkedIn</h3>
                 <p className="text-gray-400 font-sans text-center">
                   Cringe corporate buzzwords exposed.
@@ -96,7 +96,7 @@ export default function Selection({ onSelect }: SelectionProps) {
               {selectedPlatform === "spotify" && <Music className="w-16 h-16 text-[#ff4d4d]" />}
               {selectedPlatform === "valorant" && <Crosshair className="w-16 h-16 text-[#ff4d4d]" />}
               {selectedPlatform === "github" && <Terminal className="w-16 h-16 text-[#ff4d4d]" />}
-              {selectedPlatform === "linkedin" && <Linkedin className="w-16 h-16 text-[#ff4d4d]" />}
+              {selectedPlatform === "linkedin" && <Briefcase className="w-16 h-16 text-[#ff4d4d]" />}
               
               <div className="text-center w-full">
                 <h3 className="text-2xl font-bold font-mono uppercase text-[#ff4d4d] mb-2">
