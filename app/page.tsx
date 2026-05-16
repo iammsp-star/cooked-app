@@ -12,6 +12,8 @@ type AppState = "landing" | "selection" | "loading" | "reveal";
 export default function Home() {
   const [appState, setAppState] = useState<AppState>("landing");
   const [roastData, setRoastData] = useState<string>("");
+  const [identity, setIdentity] = useState<string>("ANONYMOUS_USER");
+  const [metricsData, setMetricsData] = useState<any>(null);
 
   const handleEnter = () => setAppState("selection");
   
@@ -27,6 +29,8 @@ export default function Home() {
       
       const data = await res.json();
       setRoastData(data.roast || "You broke the AI. Congratulations, you're officially un-roastable.");
+      setMetricsData(data.metrics || { status: "critical", damage: "high" });
+      setIdentity(data.identity || "GUEST_" + Math.floor(Math.random() * 1000));
     } catch (error) {
       setRoastData("Connection to Hellfire Terminal lost. Your ego is safe... for now.");
     }
@@ -58,7 +62,7 @@ export default function Home() {
           {appState === "landing" && <Landing key="landing" onEnter={handleEnter} />}
           {appState === "selection" && <Selection key="selection" onSelect={handleSelect} />}
           {appState === "loading" && <LoadingBurn key="loading" />}
-          {appState === "reveal" && <RoastReveal key="reveal" roast={roastData} onReset={handleReset} />}
+          {appState === "reveal" && <RoastReveal key="reveal" roast={roastData} identity={identity} data={metricsData} onReset={handleReset} />}
         </AnimatePresence>
       </div>
     </main>
