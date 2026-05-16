@@ -1,13 +1,13 @@
 import OpenAI from "openai";
 import { NextResponse } from 'next/server';
 
-const groq = new OpenAI({
-  apiKey: process.env.GROQ_API_KEY, 
-  baseURL: "https://api.groq.com/openai/v1", 
-});
-
 export async function POST(req: Request) {
   try {
+    const groq = new OpenAI({
+      apiKey: process.env.GROQ_API_KEY || "dummy", 
+      baseURL: "https://api.groq.com/openai/v1", 
+    });
+
     const { data, identity } = await req.json();
 
     const response = await groq.chat.completions.create({
