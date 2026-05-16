@@ -6,19 +6,21 @@ import Landing from "@/components/Landing";
 import Selection from "@/components/Selection";
 import LoadingBurn from "@/components/LoadingBurn";
 import RoastReveal from "@/components/RoastReveal";
+import AntiGravityVisualizer from "@/components/AntiGravityVisualizer";
 
-type AppState = "landing" | "selection" | "loading" | "reveal";
+type AppState = "landing" | "selection" | "syncing" | "weightless_drift" | "revealing";
 
 export default function Home() {
   const [appState, setAppState] = useState<AppState>("landing");
   const [roastData, setRoastData] = useState<string>("");
   const [identity, setIdentity] = useState<string>("ANONYMOUS_USER");
   const [metricsData, setMetricsData] = useState<any>(null);
+  const [syncedMetrics, setSyncedMetrics] = useState<string[]>([]);
 
   const handleEnter = () => setAppState("selection");
   
   const handleSelect = async (platform: "spotify" | "valorant") => {
-    setAppState("loading");
+    setAppState("syncing");
     
     try {
       const res = await fetch("/api/roast", {
@@ -31,15 +33,18 @@ export default function Home() {
       setRoastData(data.roast || "You broke the AI. Congratulations, you're officially un-roastable.");
       setMetricsData(data.metrics || { status: "critical", damage: "high" });
       setIdentity(data.identity || "GUEST_" + Math.floor(Math.random() * 1000));
+      setSyncedMetrics(data.syncedMetrics || ["Data Extraction Failed"]);
     } catch (error) {
       setRoastData("Connection to Hellfire Terminal lost. Your ego is safe... for now.");
+      setSyncedMetrics(["Connection Failure"]);
     }
     
-    setAppState("reveal");
+    setAppState("weightless_drift");
   };
 
   const handleReset = () => {
     setRoastData("");
+    setSyncedMetrics([]);
     setAppState("landing");
   };
 
@@ -61,8 +66,23 @@ export default function Home() {
         <AnimatePresence mode="wait">
           {appState === "landing" && <Landing key="landing" onEnter={handleEnter} />}
           {appState === "selection" && <Selection key="selection" onSelect={handleSelect} />}
-          {appState === "loading" && <LoadingBurn key="loading" />}
-          {appState === "reveal" && <RoastReveal key="reveal" roast={roastData} identity={identity} data={metricsData} onReset={handleReset} />}
+          {appState === "syncing" && <LoadingBurn key="syncing" />}
+          {appState === "weightless_drift" && (
+            <AntiGravityVisualizer 
+              key="drift" 
+              particles={syncedMetrics} 
+              onComplete={() => setAppState("revealing")} 
+            />
+          )}
+          {appState === "revealing" && (
+            <RoastReveal 
+              key="reveal" 
+              roast={roastData} 
+              identity={identity} 
+              data={metricsData} 
+              onReset={handleReset} 
+            />
+          )}
         </AnimatePresence>
       </div>
     </main>

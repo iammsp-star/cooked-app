@@ -16,19 +16,35 @@ export async function POST(request: Request) {
   try {
     const { platform } = await request.json();
 
-    // Simulate network delay for the "AI Inference"
-    await new Promise(resolve => setTimeout(resolve, 3500));
+    // Simulate network delay for the Account Sync Engine & Data Extraction
+    await new Promise(resolve => setTimeout(resolve, 2500));
 
     let roast = "";
+    let syncedMetrics: string[] = [];
+    let identity = "ANONYMOUS_USER";
+    let metrics: any = {};
+
     if (platform === "spotify") {
       roast = SPOTIFY_ROASTS[Math.floor(Math.random() * SPOTIFY_ROASTS.length)];
+      syncedMetrics = ["Top Artist: Taylor Swift", "Pop", "Indie Rock", "Overplayed: Cruel Summer"];
+      identity = "MusicSnob_99";
+      metrics = { status: "tragic", vibe: "unbearable" };
     } else if (platform === "valorant") {
       roast = VALORANT_ROASTS[Math.floor(Math.random() * VALORANT_ROASTS.length)];
+      syncedMetrics = ["Silver 2", "Jett Instalock", "35% Win Rate", "0.8 KDA"];
+      identity = "Hardstuck_Demon";
+      metrics = { status: "critical", damage: "low" };
     } else {
       roast = "I don't even know what to roast you for. You're just generally a disappointment.";
+      syncedMetrics = ["Unknown", "Data Not Found"];
     }
 
-    return NextResponse.json({ roast });
+    return NextResponse.json({ 
+      roast,
+      syncedMetrics,
+      identity,
+      metrics
+    });
   } catch (error) {
     return NextResponse.json({ error: "Failed to generate roast" }, { status: 500 });
   }
